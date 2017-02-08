@@ -133,7 +133,7 @@ public class BarManager {
 					@Override
 					public void widgetSelected(SelectionEvent event) {
 						if (event.detail != SWT.ARROW)
-							pmTrans.openTranscription();
+							pmTrans.openNewAudio();
 						else {
 							Menu dropMenu = new Menu(Display.getCurrent()
 									.getActiveShell());

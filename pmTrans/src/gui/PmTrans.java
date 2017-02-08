@@ -91,20 +91,13 @@ public class PmTrans {
 		gd.grabExcessVerticalSpace = true;
 		textEditor.setLayoutData(gd);
 
-		player = new DummyPlayer();
-		gd = new GridData();
-		gd.grabExcessHorizontalSpace = true;
-		gd.horizontalAlignment = SWT.FILL;
-		gd.verticalAlignment = SWT.FILL;
-		player.initGUI(shell, gd);
+		createNewDummyPlayer();
 
 		shell.addListener(SWT.Resize, new Listener() {
 			public void handleEvent(Event event) {
 				if (!menuManager.getMiniModeSelection()) {
-					Config.getInstance().setValue(Config.SHELL_HEIGHT,
-							shell.getSize().x);
-					Config.getInstance().setValue(Config.SHELL_LENGHT,
-							shell.getSize().y);
+					Config.getInstance().setValue(Config.SHELL_HEIGHT, shell.getSize().x);
+					Config.getInstance().setValue(Config.SHELL_LENGHT, shell.getSize().y);
 				}
 			}
 		});
@@ -126,8 +119,8 @@ public class PmTrans {
 		});
 
 		// Set the shell size
-		shell.setSize(Config.getInstance().getInt(Config.SHELL_HEIGHT), Config
-				.getInstance().getInt(Config.SHELL_LENGHT));
+		shell.setSize(Config.getInstance().getInt(Config.SHELL_HEIGHT),
+				Config.getInstance().getInt(Config.SHELL_LENGHT));
 
 		// Ask if the user want to save changes before closing and close the
 		// player
@@ -144,13 +137,11 @@ public class PmTrans {
 
 	private void startAutoSave() {
 		if (Config.getInstance().getBoolean(Config.AUTO_SAVE)) {
-			final int frecuency = Config.getInstance().getInt(
-					Config.AUTO_SAVE_TIME) * 60 * 1000;
+			final int frecuency = Config.getInstance().getInt(Config.AUTO_SAVE_TIME) * 60 * 1000;
 			if (frecuency > 0) {
 				Display.getCurrent().timerExec(frecuency, new Runnable() {
 					public void run() {
-						if (!textEditor.isDisposed()
-								&& transcriptionFile != null) {
+						if (!textEditor.isDisposed() && transcriptionFile != null) {
 							try {
 								textEditor.saveTranscription(transcriptionFile);
 							} catch (Exception e) {
@@ -167,35 +158,29 @@ public class PmTrans {
 	@SuppressWarnings("unchecked")
 	private void initState() {
 		try {
-			ObjectInputStream in = new ObjectInputStream(new FileInputStream(
-					Config.STATE_PATH));
+			ObjectInputStream in = new ObjectInputStream(new FileInputStream(Config.STATE_PATH));
 			CacheList<File> cl = (CacheList<File>) in.readObject();
-			audioFilesCache = cl != null ? cl : new CacheList<File>(Config
-					.getInstance().getInt(Config.AUDIO_FILE_CACHE_LENGHT));
+			audioFilesCache = cl != null ? cl
+					: new CacheList<File>(Config.getInstance().getInt(Config.AUDIO_FILE_CACHE_LENGHT));
 			cl = (CacheList<File>) in.readObject();
-			textFilesCache = cl != null ? cl : new CacheList<File>(Config
-					.getInstance().getInt(Config.TEXT_FILE_CACHE_LENGHT));
+			textFilesCache = cl != null ? cl
+					: new CacheList<File>(Config.getInstance().getInt(Config.TEXT_FILE_CACHE_LENGHT));
 			in.close();
 		} catch (FileNotFoundException e) {
-			audioFilesCache = new CacheList<File>(Config.getInstance().getInt(
-					Config.AUDIO_FILE_CACHE_LENGHT));
-			textFilesCache = new CacheList<File>(Config.getInstance().getInt(
-					Config.TEXT_FILE_CACHE_LENGHT));
+			audioFilesCache = new CacheList<File>(Config.getInstance().getInt(Config.AUDIO_FILE_CACHE_LENGHT));
+			textFilesCache = new CacheList<File>(Config.getInstance().getInt(Config.TEXT_FILE_CACHE_LENGHT));
 		} catch (Exception e) {
 			MessageBox diag = new MessageBox(shell, SWT.ICON_WARNING | SWT.OK);
 			diag.setMessage("Unable to initialize previous state. Strating from scratch");
 			diag.open();
-			audioFilesCache = new CacheList<File>(Config.getInstance().getInt(
-					Config.AUDIO_FILE_CACHE_LENGHT));
-			textFilesCache = new CacheList<File>(Config.getInstance().getInt(
-					Config.TEXT_FILE_CACHE_LENGHT));
+			audioFilesCache = new CacheList<File>(Config.getInstance().getInt(Config.AUDIO_FILE_CACHE_LENGHT));
+			textFilesCache = new CacheList<File>(Config.getInstance().getInt(Config.TEXT_FILE_CACHE_LENGHT));
 		}
 	}
 
 	private void saveState() {
 		try {
-			ObjectOutputStream out = new ObjectOutputStream(
-					new FileOutputStream(Config.STATE_PATH));
+			ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(Config.STATE_PATH));
 			out.writeObject(audioFilesCache);
 			out.writeObject(textFilesCache);
 			out.close();
@@ -214,16 +199,14 @@ public class PmTrans {
 		String[] filterNames = { "WAV and MP3 files", "All files" };
 		fd.setFilterExtensions(filterExt);
 		fd.setFilterNames(filterNames);
-		String lastPath = Config.getInstance().getString(
-				Config.LAST_OPEN_AUDIO_PATH);
+		String lastPath = Config.getInstance().getString(Config.LAST_OPEN_AUDIO_PATH);
 		if (lastPath != null && lastPath.isEmpty())
 			fd.setFileName(lastPath);
 		String selected = fd.open();
 		if (selected != null) {
 			closePlayer();
 			openAudioFile(new File(selected));
-			Config.getInstance()
-					.putValue(Config.LAST_OPEN_AUDIO_PATH, selected);
+			Config.getInstance().putValue(Config.LAST_OPEN_AUDIO_PATH, selected);
 			try {
 				Config.getInstance().save();
 			} catch (IOException e) {
@@ -238,21 +221,26 @@ public class PmTrans {
 
 		// Create the player
 		try {
-			player = new AudioPlayerTarsosDSP(file);
-			GridData gd = new GridData();
-			gd.grabExcessHorizontalSpace = true;
-			gd.horizontalAlignment = SWT.FILL;
-			gd.verticalAlignment = SWT.FILL;
-			player.initGUI(shell, gd);
+			if (file != null && file.exists()) {
 
-			audioFilesCache.add(file);
-			shell.layout();
+				player = new AudioPlayerTarsosDSP(file);
+				GridData gd = new GridData();
+				gd.grabExcessHorizontalSpace = true;
+				gd.horizontalAlignment = SWT.FILL;
+				gd.verticalAlignment = SWT.FILL;
+				player.initGUI(shell, gd);
+
+				audioFilesCache.add(file);
+				shell.layout();
+			} else {
+				createNewDummyPlayer();
+				audioFilesCache.remove(file);
+				MessageBox diag = new MessageBox(shell, SWT.ICON_WARNING | SWT.OK);
+				diag.setMessage("Unable to open file " + file.getPath());
+				diag.open();
+			}
 		} catch (Exception e) {
-			player = new DummyPlayer();
-			audioFilesCache.remove(file);
-			MessageBox diag = new MessageBox(shell, SWT.ICON_WARNING | SWT.OK);
-			diag.setMessage("Unable to open file " + file.getPath());
-			diag.open();
+			e.printStackTrace();
 		}
 	}
 
@@ -271,15 +259,13 @@ public class PmTrans {
 			String[] filterNames = { "TXT files" };
 			fd.setFilterExtensions(filterExt);
 			fd.setFilterNames(filterNames);
-			String lastPath = Config.getInstance().getString(
-					Config.LAST_OPEN_TEXT_PATH);
+			String lastPath = Config.getInstance().getString(Config.LAST_OPEN_TEXT_PATH);
 			if (lastPath != null && !lastPath.isEmpty())
 				fd.setFileName(lastPath);
 			String selected = fd.open();
 			if (selected != null) {
 				importTextFile(new File(selected));
-				Config.getInstance().putValue(Config.LAST_OPEN_TEXT_PATH,
-						selected);
+				Config.getInstance().putValue(Config.LAST_OPEN_TEXT_PATH, selected);
 				try {
 					Config.getInstance().save();
 				} catch (IOException e) {
@@ -297,15 +283,13 @@ public class PmTrans {
 			String[] filterNames = { "pmTrans transcription files" };
 			fd.setFilterExtensions(filterExt);
 			fd.setFilterNames(filterNames);
-			String lastPath = Config.getInstance().getString(
-					Config.LAST_OPEN_TEXT_PATH);
+			String lastPath = Config.getInstance().getString(Config.LAST_OPEN_TEXT_PATH);
 			if (lastPath != null && !lastPath.isEmpty())
 				fd.setFileName(lastPath);
 			String selected = fd.open();
 			if (selected != null) {
 				openTranscriptionFile(new File(selected));
-				Config.getInstance().putValue(Config.LAST_OPEN_TEXT_PATH,
-						selected);
+				Config.getInstance().putValue(Config.LAST_OPEN_TEXT_PATH, selected);
 				try {
 					Config.getInstance().save();
 				} catch (IOException e) {
@@ -326,8 +310,7 @@ public class PmTrans {
 			} catch (Exception e) {
 				textEditor.clear();
 				textFilesCache.remove(transcriptionFile);
-				MessageBox diag = new MessageBox(shell, SWT.ICON_WARNING
-						| SWT.OK);
+				MessageBox diag = new MessageBox(shell, SWT.ICON_WARNING | SWT.OK);
 				diag.setMessage("Unable to open file " + f.getPath());
 				diag.open();
 				transcriptionFile = null;
@@ -342,8 +325,8 @@ public class PmTrans {
 	protected boolean closeTranscription() {
 		if (!textEditor.isDisposed()) {
 			if (textEditor.isChanged()) {
-				MessageBox diag = new MessageBox(shell, SWT.APPLICATION_MODAL
-						| SWT.ICON_QUESTION | SWT.YES | SWT.NO | SWT.CANCEL);
+				MessageBox diag = new MessageBox(shell,
+						SWT.APPLICATION_MODAL | SWT.ICON_QUESTION | SWT.YES | SWT.NO | SWT.CANCEL);
 				diag.setMessage("You have unsaved changes, would you like to save them?");
 				int opt = diag.open();
 				if (opt == SWT.YES)
@@ -423,31 +406,24 @@ public class PmTrans {
 					textEditor.saveTranscription(transcriptionFile);
 				} catch (Exception e) {
 					e.printStackTrace();
-					MessageBox diag = new MessageBox(shell, SWT.ICON_WARNING
-							| SWT.OK);
-					diag.setMessage("Unable to write file "
-							+ transcriptionFile.getPath());
+					MessageBox diag = new MessageBox(shell, SWT.ICON_WARNING | SWT.OK);
+					diag.setMessage("Unable to write file " + transcriptionFile.getPath());
 					diag.open();
 				}
 			else {
 				try {
 					boolean done = false;
 					while (!done) {
-						FileDialog fd = new FileDialog(Display.getCurrent()
-								.getActiveShell(), SWT.SAVE);
-						fd.setFilterNames(new String[] {
-								"pmTrans transcription file", "All Files (*.*)" });
+						FileDialog fd = new FileDialog(Display.getCurrent().getActiveShell(), SWT.SAVE);
+						fd.setFilterNames(new String[] { "pmTrans transcription file", "All Files (*.*)" });
 						fd.setFilterExtensions(new String[] { "*.xpmt", "*.*" });
 						String file = fd.open();
 						if (file != null) {
 							transcriptionFile = new File(file);
 							boolean overwrite = true;
 							if (transcriptionFile.exists())
-								overwrite = MessageDialog.openConfirm(shell,
-										"Overwrite current file?",
-										"Would you like to overwrite "
-												+ transcriptionFile.getName()
-												+ "?");
+								overwrite = MessageDialog.openConfirm(shell, "Overwrite current file?",
+										"Would you like to overwrite " + transcriptionFile.getName() + "?");
 							if (overwrite) {
 								shell.setText(transcriptionFile.getName());
 								textEditor.saveTranscription(transcriptionFile);
@@ -459,10 +435,8 @@ public class PmTrans {
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
-					MessageBox diag = new MessageBox(shell, SWT.ICON_WARNING
-							| SWT.OK);
-					diag.setMessage("Unable to write file "
-							+ transcriptionFile.getPath());
+					MessageBox diag = new MessageBox(shell, SWT.ICON_WARNING | SWT.OK);
+					diag.setMessage("Unable to write file " + transcriptionFile.getPath());
 					diag.open();
 				}
 			}
@@ -477,28 +451,21 @@ public class PmTrans {
 		boolean done = false;
 		while (!done)
 			if (!textEditor.isDisposed()) {
-				FileDialog fd = new FileDialog(Display.getCurrent()
-						.getActiveShell(), SWT.SAVE);
-				fd.setFilterNames(new String[] { "Plain text file (*.txt)",
-						"All Files (*.*)" });
+				FileDialog fd = new FileDialog(Display.getCurrent().getActiveShell(), SWT.SAVE);
+				fd.setFilterNames(new String[] { "Plain text file (*.txt)", "All Files (*.*)" });
 				fd.setFilterExtensions(new String[] { "*.txt", "*.*" });
-				String lastPath = Config.getInstance().getString(
-						Config.LAST_EXPORT_TRANSCRIPTION_PATH);
+				String lastPath = Config.getInstance().getString(Config.LAST_EXPORT_TRANSCRIPTION_PATH);
 				if (lastPath != null && !lastPath.isEmpty())
 					fd.setFileName(lastPath);
 				String file = fd.open();
 				try {
 					if (file != null) {
-						Config.getInstance().putValue(
-								Config.LAST_EXPORT_TRANSCRIPTION_PATH, file);
+						Config.getInstance().putValue(Config.LAST_EXPORT_TRANSCRIPTION_PATH, file);
 						File destFile = new File(file);
 						boolean overwrite = true;
 						if (destFile.exists())
-							overwrite = MessageDialog.openConfirm(
-									shell,
-									"Overwrite current file?",
-									"Would you like to overwrite "
-											+ destFile.getName() + "?");
+							overwrite = MessageDialog.openConfirm(shell, "Overwrite current file?",
+									"Would you like to overwrite " + destFile.getName() + "?");
 						if (overwrite) {
 							textEditor.exportText(new File(file));
 							done = true;
@@ -507,10 +474,8 @@ public class PmTrans {
 						done = true;
 				} catch (Exception e) {
 					e.printStackTrace();
-					MessageBox diag = new MessageBox(shell, SWT.ICON_WARNING
-							| SWT.OK);
-					diag.setMessage("Unable to export to file "
-							+ transcriptionFile.getPath());
+					MessageBox diag = new MessageBox(shell, SWT.ICON_WARNING | SWT.OK);
+					diag.setMessage("Unable to export to file " + transcriptionFile.getPath());
 					diag.open();
 				}
 			}
@@ -528,10 +493,8 @@ public class PmTrans {
 					textEditor.importText(new File(selected));
 				} catch (IOException e) {
 					e.printStackTrace();
-					MessageBox diag = new MessageBox(shell, SWT.ICON_WARNING
-							| SWT.OK);
-					diag.setMessage("Unable to open file "
-							+ transcriptionFile.getPath());
+					MessageBox diag = new MessageBox(shell, SWT.ICON_WARNING | SWT.OK);
+					diag.setMessage("Unable to open file " + transcriptionFile.getPath());
 					diag.open();
 				}
 			}
@@ -560,8 +523,8 @@ public class PmTrans {
 		textEditor.setLayoutData(gd);
 		player.getVisualization().moveBelow(textEditor);
 
-		shell.setSize(Config.getInstance().getInt(Config.SHELL_HEIGHT), Config
-				.getInstance().getInt(Config.SHELL_LENGHT));
+		shell.setSize(Config.getInstance().getInt(Config.SHELL_HEIGHT),
+				Config.getInstance().getInt(Config.SHELL_LENGHT));
 		shell.layout();
 	}
 
@@ -645,9 +608,8 @@ public class PmTrans {
 		try {
 			Config.getInstance().showConfigurationDialog(shell);
 		} catch (PmTransException e) {
-			MessageBox diag = new MessageBox(Display.getCurrent()
-					.getActiveShell(), SWT.APPLICATION_MODAL | SWT.ICON_ERROR
-					| SWT.OK);
+			MessageBox diag = new MessageBox(Display.getCurrent().getActiveShell(),
+					SWT.APPLICATION_MODAL | SWT.ICON_ERROR | SWT.OK);
 			diag.setMessage("Unable to save preferences");
 			diag.open();
 		}
@@ -663,5 +625,17 @@ public class PmTrans {
 
 	public CacheList<File> getRecentAudios() {
 		return audioFilesCache;
+	}
+
+	private void createNewDummyPlayer() {
+		closePlayer();
+		player = new DummyPlayer();
+		GridData gd = new GridData();
+		gd.grabExcessHorizontalSpace = true;
+		gd.horizontalAlignment = SWT.FILL;
+		gd.verticalAlignment = SWT.FILL;
+		player.initGUI(shell, gd);
+		shell.setSize(shell.getSize());
+		shell.layout();
 	}
 }
