@@ -29,7 +29,7 @@ import util.WordIndexer;
 import util.WordIndexerWrapper;
 
 /**
- * @author Juan Erasmo Gómez
+ * @author Juan Erasmo Gï¿½mez
  */
 public class FindReplaceDialog extends Dialog {
 
@@ -335,7 +335,7 @@ public class FindReplaceDialog extends Dialog {
 		if (!text.getSelectionText().isEmpty()) {
 			text.replaceTextRange(text.getSelection().x, text.getSelection().y
 					- text.getSelection().x, replaceText.getText());
-			text.setSelection(x.x);
+			text.setSelection(x.x+replaceText.getText().length());
 			return true;
 		}
 		return false;
