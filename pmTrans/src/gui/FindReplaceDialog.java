@@ -29,13 +29,12 @@ import util.WordIndexer;
 import util.WordIndexerWrapper;
 
 /**
- * @author Juan Erasmo G�mez
+ * @author Juan Erasmo Gómez
  */
 public class FindReplaceDialog extends Dialog {
 
 	private static final String FIND_HIGHLIGHT_DATA = "find";
-	private static final Color FIND_HIGHLIGHT_COLOR = Display.getCurrent()
-			.getSystemColor(SWT.COLOR_YELLOW);
+	private static final Color FIND_HIGHLIGHT_COLOR = Display.getCurrent().getSystemColor(SWT.COLOR_YELLOW);
 
 	private StyledText text;
 	private Button wholeWords;
@@ -83,12 +82,10 @@ public class FindReplaceDialog extends Dialog {
 
 		find = new Label(shell, SWT.NONE);
 		find.setText("Find:");
-		find.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1,
-				1));
+		find.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 
 		findText = new Text(shell, SWT.BORDER);
-		findText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3,
-				1));
+		findText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 3, 1));
 		findText.addListener(SWT.Modify, new Listener() {
 			public void handleEvent(Event event) {
 				clearSearchResults();
@@ -97,8 +94,7 @@ public class FindReplaceDialog extends Dialog {
 
 		Button findNextButton = new Button(shell, SWT.PUSH);
 		findNextButton.setText("Find next");
-		findNextButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false,
-				false, 2, 1));
+		findNextButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 2, 1));
 		shell.setDefaultButton(findNextButton);
 		findNextButton.addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event event) {
@@ -111,12 +107,10 @@ public class FindReplaceDialog extends Dialog {
 		replace.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false));
 
 		replaceText = new Text(shell, SWT.BORDER);
-		replaceText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false,
-				false, 3, 1));
+		replaceText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 3, 1));
 
 		Button replaceButton = new Button(shell, SWT.PUSH);
-		replaceButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false,
-				false, 2, 1));
+		replaceButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 2, 1));
 		replaceButton.setText("Replace");
 		replaceButton.addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event event) {
@@ -124,11 +118,9 @@ public class FindReplaceDialog extends Dialog {
 			}
 		});
 
-		new Label(shell, SWT.NONE).setLayoutData(new GridData(SWT.FILL,
-				SWT.FILL, false, false, 4, 1));
+		new Label(shell, SWT.NONE).setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 4, 1));
 		Button replaceFind = new Button(shell, SWT.PUSH);
-		replaceFind.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false,
-				false, 2, 1));
+		replaceFind.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 2, 1));
 		replaceFind.setText("Replace/Find");
 		replaceFind.addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event event) {
@@ -136,11 +128,9 @@ public class FindReplaceDialog extends Dialog {
 			}
 		});
 
-		new Label(shell, SWT.NONE).setLayoutData(new GridData(SWT.FILL,
-				SWT.FILL, false, false, 4, 1));
+		new Label(shell, SWT.NONE).setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 4, 1));
 		Button replaceAllButton = new Button(shell, SWT.PUSH);
-		replaceAllButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false,
-				false, 2, 1));
+		replaceAllButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 2, 1));
 		replaceAllButton.setText("Replace All");
 		replaceAllButton.addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event event) {
@@ -154,12 +144,10 @@ public class FindReplaceDialog extends Dialog {
 		renderTransparency(shell);
 
 		// Close button
-		new Label(shell, SWT.NONE).setLayoutData(new GridData(SWT.FILL,
-				SWT.FILL, false, false, 4, 1));
+		new Label(shell, SWT.NONE).setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 4, 1));
 		Button close = new Button(shell, SWT.PUSH);
 		close.setText("Close");
-		close.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 2,
-				1));
+		close.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 2, 1));
 		close.addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event event) {
 				shell.dispose();
@@ -193,8 +181,7 @@ public class FindReplaceDialog extends Dialog {
 		transparencySlider.setMinimum(20);
 		transparencySlider.setMaximum(100);
 		transparencySlider.setPageIncrement(90);
-		transparencySlider.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
-				false));
+		transparencySlider.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		transparencySlider.setSelection(100);
 		transparencySlider.addListener(SWT.Selection, new Listener() {
 
@@ -239,8 +226,8 @@ public class FindReplaceDialog extends Dialog {
 		return opt;
 	}
 
-	private List<WordIndexerWrapper> findAll(String keyWord, boolean matchCase,
-			boolean wholeWord, boolean regex, Point searchBounds) {
+	private List<WordIndexerWrapper> findAll(String keyWord, boolean matchCase, boolean wholeWord, boolean regex,
+			Point searchBounds) {
 
 		String wholeText = text.getText();
 		if (!matchCase) {
@@ -259,12 +246,10 @@ public class FindReplaceDialog extends Dialog {
 		WordIndexer finder = new WordIndexer(wholeText);
 		List<WordIndexerWrapper> indexes = new LinkedList<WordIndexerWrapper>();
 		try {
-			indexes = finder.findIndexesForKeyword(keyWord, searchBounds.x,
-					searchBounds.y);
+			indexes = finder.findIndexesForKeyword(keyWord, searchBounds.x, searchBounds.y);
 		} catch (PatternSyntaxException e) {
-			MessageBox diag = new MessageBox(Display.getCurrent()
-					.getActiveShell(), SWT.APPLICATION_MODAL | SWT.ICON_ERROR
-					| SWT.OK);
+			MessageBox diag = new MessageBox(Display.getCurrent().getActiveShell(),
+					SWT.APPLICATION_MODAL | SWT.ICON_ERROR | SWT.OK);
 			diag.setMessage("Regular expression error.\n\n" + e.getMessage());
 			diag.open();
 		}
@@ -282,8 +267,7 @@ public class FindReplaceDialog extends Dialog {
 			WordIndexerWrapper next = resultsIterator.next();
 			text.setSelection(next.start, next.end);
 			return true;
-		} else if (directionBackward.getSelection()
-				&& resultsIterator.hasPrevious()) {
+		} else if (directionBackward.getSelection() && resultsIterator.hasPrevious()) {
 			WordIndexerWrapper previous = resultsIterator.previous();
 			text.setSelection(previous.start, previous.end);
 			return true;
@@ -298,19 +282,19 @@ public class FindReplaceDialog extends Dialog {
 		Point searchBounds = new Point(0, text.getCharCount() - 1);
 		if (searchBounds.x >= searchBounds.y)
 			return false;
-		List<WordIndexerWrapper> indexes = findAll(findText.getText(),
-				matchCase.getSelection(), wholeWords.getSelection(),
-				regex.getSelection(), searchBounds);
+		List<WordIndexerWrapper> indexes = findAll(findText.getText(), matchCase.getSelection(),
+				wholeWords.getSelection(), regex.getSelection(), searchBounds);
 		resultsIterator = indexes.listIterator();
+
 		// Highlight the findings
 		while (highlightAll.getSelection() && resultsIterator.hasNext()) {
 			WordIndexerWrapper i = resultsIterator.next();
-			StyleRange highlight = new StyleRange(i.start, i.end - i.start,
-					null, FIND_HIGHLIGHT_COLOR);
+			StyleRange highlight = new StyleRange(i.start, i.end - i.start, null, FIND_HIGHLIGHT_COLOR);
 			highlight.data = new ReversibleStyleWrapper(FIND_HIGHLIGHT_DATA,
 					text.getStyleRanges(i.start, i.end - i.start));
 			text.setStyleRange(highlight);
 		}
+
 		// Reset the iterator position
 		resultsIterator = indexes.listIterator();
 		while (resultsIterator.hasNext()) {
@@ -333,9 +317,9 @@ public class FindReplaceDialog extends Dialog {
 	private boolean replace() {
 		Point x = text.getSelection();
 		if (!text.getSelectionText().isEmpty()) {
-			text.replaceTextRange(text.getSelection().x, text.getSelection().y
-					- text.getSelection().x, replaceText.getText());
-			text.setSelection(x.x+replaceText.getText().length());
+			text.replaceTextRange(text.getSelection().x, text.getSelection().y - text.getSelection().x,
+					replaceText.getText());
+			text.setSelection(x.x + replaceText.getText().length());
 			return true;
 		}
 		return false;
@@ -345,8 +329,7 @@ public class FindReplaceDialog extends Dialog {
 		StyleRange[] styles = text.getStyleRanges();
 		for (int i = 0; i < styles.length; i++)
 			if (styles[i].data instanceof ReversibleStyleWrapper
-					&& ((ReversibleStyleWrapper) styles[i].data).id
-							.equals(FIND_HIGHLIGHT_DATA)) {
+					&& ((ReversibleStyleWrapper) styles[i].data).id.equals(FIND_HIGHLIGHT_DATA)) {
 				text.replaceStyleRanges(styles[i].start, styles[i].length,
 						((ReversibleStyleWrapper) styles[i].data).ranges);
 				i = 0;

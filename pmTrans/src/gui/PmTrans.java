@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.Desktop;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -637,5 +638,12 @@ public class PmTrans {
 		player.initGUI(shell, gd);
 		shell.setSize(shell.getSize());
 		shell.layout();
+	}
+
+	/**
+	 * Opens the contribute page in a web browser
+	 */
+	public void contribute() {
+		org.eclipse.swt.program.Program.launch(Config.CONTRIBUTE_URL);
 	}
 }

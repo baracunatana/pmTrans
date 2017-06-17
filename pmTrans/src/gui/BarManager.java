@@ -64,6 +64,12 @@ public class BarManager {
 			}
 		}, Config.getInstance().getImage(Config.ICON_PATH_SETTINGS));
 
+		addItemToToolBar(tb, null, "Contribute to pmTrans", SWT.PUSH, new Listener() {
+			public void handleEvent(Event event) {
+				pmTrans.contribute();
+			}
+		}, Config.getInstance().getImage(Config.ICON_PATH_CONTRIBUTE));
+		
 		tb.pack();
 		CoolItem fileCI = new CoolItem(bar, SWT.NONE);
 		Point s = tb.getSize();

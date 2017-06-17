@@ -60,6 +60,7 @@ public class Config extends PreferenceStore {
 	public static String ICON_PATH_CHANGE_BACKGROUND_COLOR = "/icon/changeBackgroundColor.png";
 	public static String ICON_PATH_CHANGE_FONT_COLOR = "/icon/changeFontColor.png";
 	public static String ICON_PATH_SETTINGS = "/icon/settings.png";
+	public static String ICON_PATH_CONTRIBUTE = "/icon/contribute.png";
 	public static String DEFAULT_ACCELERATORS = "cxvfosa";
 
 	// Main shell initial dimensions
@@ -76,6 +77,9 @@ public class Config extends PreferenceStore {
 	private String LAST_EXPORT_TRANSCRIPTION_PATH_DEFALUT = "";
 	public static String LAST_EXPORT_TRANSCRIPTION_PATH = "last.export.transcription.path";
 
+	// URLs
+	public static String CONTRIBUTE_URL = "https://github.com/juanerasmoe/pmTrans/wiki/Contribute-to-pmTrans";
+	
 	/**
 	 * Configurable stuff
 	 */

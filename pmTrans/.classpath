@@ -8,6 +8,6 @@
 	<classpathentry kind="lib" path="lib/TarsosDSP.jar"/>
 	<classpathentry kind="lib" path="lib/TarsosTranscoder-1.1-bin.jar"/>
 	<classpathentry kind="lib" path="lib/JNativeHook.jar"/>
-	<classpathentry kind="lib" path="lib/swt-linux64-4.2.2.jar"/>
+	<classpathentry kind="lib" path="lib/swt-linux64-4.2.2.jar" sourcepath="lib/swt-src.zip"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
