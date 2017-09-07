@@ -23,7 +23,7 @@ pmTrans (The Poor's Man Transcriber) is an open source tool for interview transc
 * Works on Linux, Mac, and Windows machines.
 * Requires no installation. Just download and use! 
 
-See some [screenshots]().
+See some [screenshots](https://github.com/juanerasmoe/pmTrans/wiki/Screenshots).
 
 # Download
 You can find the lates release of pmTrans [Here](https://github.com/juanerasmoe/pmTrans/releases).
